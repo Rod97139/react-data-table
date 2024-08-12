@@ -1,2 +1,1 @@
-export { Counter } from "./counter";
-export { Greeter } from "./greeter";
+export {ReactDataTable} from "./ReactDataTable";

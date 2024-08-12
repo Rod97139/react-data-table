@@ -7,13 +7,13 @@ This repository was created as part of a guide to publishing TypeScript React co
 Install this package:
 
 ```shell
-npm add typescript-components-by-rupert
+npm add react-data-table-by-rod
 ```
 
 Import the Counter component:
 
 ```js
-import { Counter } from "typescript-components-by-rupert";
+import { ReactDataTable } from "react-data-table-by-rod";
 ```
 
-You can then render the `Counter` component like any other React component in JSX.
+You can then render the `ReactDataTable` component like any other React component in JSX.
