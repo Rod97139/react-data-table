@@ -2,8 +2,7 @@ import * as React from "react";
 
 import { useState } from "react"
 
-  // Interface pour les props du composant DataTable
-  interface TableProps{
+interface TableProps{
     data: Record<string, any>[]; // Tableau d'objets représentant les données
   }
 
@@ -11,6 +10,7 @@ export const ReactDataTable = ({data}: TableProps) => {
 
     const [filteredData, setFilteredData] = useState(data)
 
+    const [searchValue, setSearchValue] = useState('')
 
     const [perPage, setPerPage] = useState(10)
     //nombre de pages
@@ -19,6 +19,65 @@ export const ReactDataTable = ({data}: TableProps) => {
     const [page, setPage] = useState(1)
     const [offset, setOffset] = useState(0)
     const displaiedData = filteredData.slice(offset, offset + perPage)
+
+    const handleSort = (target: HTMLTableHeaderCellElement) => {
+        const key = target.id
+        // passer tout les classes des element th a none exepter l'element cliqué
+        document.querySelectorAll('.data-table-sorter').forEach(item => {
+            if (item !== target) {
+                item.classList.remove('asc')
+                item.classList.remove('dsc')
+                if (item.classList.contains('none')) {
+                    return
+                }
+                item.classList.add('none')
+            }
+        })
+        if (target.classList.contains('asc')) {
+            target.classList.remove('asc')
+            target.classList.toggle('dsc')
+            const sortedData = [...filteredData].sort((a, b) => {
+                if (a[key] > b[key]) {
+                    return -1
+                }
+                if (a[key] < b[key]) {
+                    return 1
+                }
+                return 0
+            })
+            setFilteredData(sortedData)
+            return
+        }
+
+        if (target.classList.contains('dsc')) {
+            target.classList.remove('dsc')
+            target.classList.toggle('none')
+            if (searchValue.length === 0) {
+                setFilteredData(data)
+                return
+            }
+            searchItem(searchValue)
+            return
+        }
+
+        if (target.classList.contains('none')) {
+            target.classList.remove('none')
+            target.classList.toggle('asc')
+            const sortedData = [...filteredData].sort((a, b) => {
+                if (a[key] < b[key]) {
+                    return -1
+                }
+                if (a[key] > b[key]) {
+                    return 1
+                }
+                return 0
+            })
+            setFilteredData(sortedData)
+            return
+        }
+    }
+
+
 
     const handleNext = () => {
         if (page === pageCount) {
@@ -38,19 +97,18 @@ export const ReactDataTable = ({data}: TableProps) => {
       };
 
 
-    const searchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const searchValue = e.target.value
+    const searchItem = (inputValue: string) => {
+        
+        setSearchValue(inputValue)
 
-        if (searchValue.length === 0) {
-            setPage(1)
-            setOffset(0)
+        if (inputValue.length === 0) {
             setFilteredData(data)
             return
         }
 
         const filteredData = data.filter(item => {
             return Object.values(item).some(value => 
-                value.toLowerCase().includes(searchValue.toLowerCase())
+                value.toLowerCase().includes(inputValue.toLowerCase())
             )
         })
         setPage(1)
@@ -78,13 +136,13 @@ export const ReactDataTable = ({data}: TableProps) => {
             <label htmlFor="data-table-length">entries</label>
         </div>
         <div className="data-table-filter">
-            <input onChange={searchItem} type="text" placeholder="Search by Name" />
+            <input onChange={(e)=> searchItem(e.target.value)} type="text" placeholder="Search by Name" />
         </div>
-        <table>
-            <thead>
+        <table className="data-table-body">
+            <thead className="data-table-header">
                 <tr>
                     {data.length > 0 && Object.keys(data[0]).map((key, index) => {
-                        return <th key={index}>{key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) =>  str.toUpperCase())}</th>
+                        return <th onClick={(e) => handleSort(e.target as HTMLTableCellElement)} className="data-table-sorter none" id={key} key={index}>{key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) =>  str.toUpperCase())}</th>
                     })}
                 </tr>
             </thead>
