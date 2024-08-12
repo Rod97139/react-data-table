@@ -1,4 +1,4 @@
-# TypeScript Components by Rupert
+# TypeScript Components by Rod
 
 This repository was created as part of a guide to publishing TypeScript React components. You can read the guide over here: [Publishing TypeScript React components to NPM](https://fildon.hashnode.dev/publishing-typescript-react-components-to-npm)
 
@@ -7,7 +7,7 @@ This repository was created as part of a guide to publishing TypeScript React co
 Install this package:
 
 ```shell
-npm add react-data-table-by-rod
+npm i react-data-table-by-rod
 ```
 
 Import the Counter component:
