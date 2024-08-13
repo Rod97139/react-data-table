@@ -98,6 +98,15 @@ export const ReactDataTable = ({data}: TableProps) => {
 
 
     const searchItem = (inputValue: string) => {
+        document.querySelectorAll('.data-table-sorter').forEach(item => {
+                item.classList.remove('asc')
+                item.classList.remove('dsc')
+                if (item.classList.contains('none')) {
+                    return
+                }
+                item.classList.add('none')
+        })
+
         
         setSearchValue(inputValue)
 
@@ -120,29 +129,32 @@ export const ReactDataTable = ({data}: TableProps) => {
     <div className="data-table-container">
         { data.length === 0 ? <p>No data available</p> : 
         <>
-        <div className="data-table-length">
-            <label htmlFor="data-table-length">Show</label>
-            <select onChange={(e) => {
-
-                setPerPage(Number(e.target.value))
-                setPage(1)
-                setOffset(0)
-                }} name="data-table-length" id="data-table-length">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-            </select>
-            <label htmlFor="data-table-length">entries</label>
-        </div>
-        <div className="data-table-filter">
-            <input onChange={(e)=> searchItem(e.target.value)} type="text" placeholder="Search by Name" />
-        </div>
+          <div className="data-table-search-bar">
+            <div className="data-table-length">
+                <label htmlFor="data-table-length">Show</label>
+                <select onChange={(e) => {
+                    setPerPage(Number(e.target.value))
+                    setPage(1)
+                    setOffset(0)
+                    }} name="data-table-length" id="data-table-length">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <label htmlFor="data-table-length">entries</label>
+            </div>
+            <div className="data-table-filter">
+                <input onChange={(e)=> searchItem(e.target.value)} type="text" placeholder="Search" />
+            </div>
+          </div>
         <table className="data-table-body">
             <thead className="data-table-header">
                 <tr>
                     {data.length > 0 && Object.keys(data[0]).map((key, index) => {
-                        return <th onClick={(e) => handleSort(e.target as HTMLTableCellElement)} className="data-table-sorter none" id={key} key={index}>{key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) =>  str.toUpperCase())}</th>
+                        return <th
+                        style={{cursor: 'pointer'}}
+                        onClick={(e) => handleSort(e.target as HTMLTableCellElement)} className="data-table-sorter none" id={key} key={index}>{key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) =>  str.toUpperCase())}</th>
                     })}
                 </tr>
             </thead>
@@ -162,8 +174,29 @@ export const ReactDataTable = ({data}: TableProps) => {
             <p>Showing {Number(offset) + 1} to {(offset + perPage < filteredData.length) ? Number(offset + perPage) : filteredData.length} of {filteredData.length} entries</p>
         </div>
         <div className="data-table-paginate">
-            <button onClick={handlePrev} >Prev</button>
-            <button onClick={handleNext} >Next</button>
+        { pageCount > 1 && <>
+            { page > 1 &&
+                <button onClick={handlePrev} >Prev</button>
+            }
+            {Array(pageCount).fill(0).map((_, index) => {
+                if (index + 1 === page) {
+                    return <button key={index} className="active" onClick={() => {
+                        setPage(index + 1)
+                        setOffset(index * perPage)
+                    }}>{index + 1}</button>
+                } else {
+                    return <button key={index} onClick={() => {
+                        setPage(index + 1)
+                        setOffset(index * perPage)
+                    }}>{index + 1}</button>
+                }
+            })}
+
+            { page < pageCount &&
+                <button onClick={handleNext} >Next</button>
+                }
+            </>
+        }
         </div>
        </> 
        }
