@@ -4,9 +4,10 @@ import { useState } from "react"
 
 interface TableProps{
     data: Record<string, any>[]; // Tableau d'objets représentant les données
+    dateFormatKey?: string[]; // Tableau de clés de données qui doivent être formatées en tant que date
   }
 
-export const ReactDataTable = ({data}: TableProps) => {
+export const ReactDataTable = ({data, dateFormatKey}: TableProps) => {
 
     const [filteredData, setFilteredData] = useState(data)
 
@@ -36,6 +37,19 @@ export const ReactDataTable = ({data}: TableProps) => {
         if (target.classList.contains('asc')) {
             target.classList.remove('asc')
             target.classList.toggle('dsc')
+            if (dateFormatKey && dateFormatKey.includes(key)) {
+                const sortedData = [...filteredData].sort((a, b) => {
+                    if (new Date(a[key]) > new Date(b[key])) {
+                        return -1
+                    }
+                    if (new Date(a[key]) < new Date(b[key])) {
+                        return 1
+                    }
+                    return 0
+                })
+                setFilteredData(sortedData)
+                return
+            }
             const sortedData = [...filteredData].sort((a, b) => {
                 if (a[key] > b[key]) {
                     return -1
@@ -63,6 +77,19 @@ export const ReactDataTable = ({data}: TableProps) => {
         if (target.classList.contains('none')) {
             target.classList.remove('none')
             target.classList.toggle('asc')
+            if (dateFormatKey && dateFormatKey.includes(key)) {
+                const sortedData = [...filteredData].sort((a, b) => {
+                    if (new Date(a[key]) < new Date(b[key])) {
+                        return -1
+                    }
+                    if (new Date(a[key]) > new Date(b[key])) {
+                        return 1
+                    }
+                    return 0
+                })
+                setFilteredData(sortedData)
+                return
+            }
             const sortedData = [...filteredData].sort((a, b) => {
                 if (a[key] < b[key]) {
                     return -1
