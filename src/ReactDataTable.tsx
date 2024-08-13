@@ -144,7 +144,7 @@ export const ReactDataTable = ({data, dateFormatKey}: TableProps) => {
 
         const filteredData = data.filter(item => {
             return Object.values(item).some(value => 
-                value.toLowerCase().includes(inputValue.toLowerCase())
+                value.toString().toLowerCase().includes(inputValue.toLowerCase())
             )
         })
         setPage(1)
