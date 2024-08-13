@@ -154,7 +154,7 @@ export const ReactDataTable = ({data, dateFormatKey}: TableProps) => {
 
   return (
     <div className="data-table-container">
-        { data.length === 0 ? <p>No data available</p> : 
+        { data.length === 0 ? <p className="no-data-available">No data available</p> : 
         <>
           <div className="data-table-search-bar">
             <div className="data-table-length">
@@ -175,7 +175,7 @@ export const ReactDataTable = ({data, dateFormatKey}: TableProps) => {
                 <input onChange={(e)=> searchItem(e.target.value)} type="text" placeholder="Search" />
             </div>
           </div>
-        <table className="data-table-body">
+        <table className="data-table-wrapper">
             <thead className="data-table-header">
                 <tr>
                     {data.length > 0 && Object.keys(data[0]).map((key, index) => {
@@ -185,7 +185,7 @@ export const ReactDataTable = ({data, dateFormatKey}: TableProps) => {
                     })}
                 </tr>
             </thead>
-            <tbody>
+            <tbody className="data-table-body">
                 {data.length > 0 && displaiedData.map((item, index) => {
                     return (
                         <tr key={index}>

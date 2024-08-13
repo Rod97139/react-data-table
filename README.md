@@ -10,7 +10,7 @@ Install this package:
 npm i react-data-table-by-rod
 ```
 
-Import the Counter component:
+Import the ReactDataTable component:
 
 ```js
 import { ReactDataTable } from "react-data-table-by-rod";
