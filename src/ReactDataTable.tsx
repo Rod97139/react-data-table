@@ -197,13 +197,15 @@ export const ReactDataTable = ({data, dateFormatKey}: TableProps) => {
                 })}
             </tbody>
         </table>
+        <div className="data-table-footer">
         <div className="data-table-info">
             <p>Showing {Number(offset) + 1} to {(offset + perPage < filteredData.length) ? Number(offset + perPage) : filteredData.length} of {filteredData.length} entries</p>
         </div>
         <div className="data-table-paginate">
         { pageCount > 1 && <>
-            { page > 1 &&
-                <button onClick={handlePrev} >Prev</button>
+            { page > 1 ?
+                <button className="data-table-paginate-prev" onClick={handlePrev} >Prev</button>
+                : <button className="data-table-paginate-prev" disabled>Prev</button>
             }
             {Array(pageCount).fill(0).map((_, index) => {
                 if (index + 1 === page) {
@@ -219,11 +221,13 @@ export const ReactDataTable = ({data, dateFormatKey}: TableProps) => {
                 }
             })}
 
-            { page < pageCount &&
-                <button onClick={handleNext} >Next</button>
+            { page < pageCount ?
+                <button className="data-table-paginate-next" onClick={handleNext} >Next</button>
+                : <button className="data-table-paginate-next" disabled>Next</button>
                 }
             </>
         }
+        </div>
         </div>
        </> 
        }
