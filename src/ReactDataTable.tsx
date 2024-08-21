@@ -175,6 +175,7 @@ export const ReactDataTable = ({data, dateFormatKey}: TableProps) => {
                 <input onChange={(e)=> searchItem(e.target.value)} type="text" placeholder="Search" />
             </div>
           </div>
+        <div className="scroll-table">
         <table className="data-table-wrapper">
             <thead className="data-table-header">
                 <tr>
@@ -197,6 +198,7 @@ export const ReactDataTable = ({data, dateFormatKey}: TableProps) => {
                 })}
             </tbody>
         </table>
+        </div>
         <div className="data-table-footer">
         <div className="data-table-info">
             <p>Showing {Number(offset) + 1} to {(offset + perPage < filteredData.length) ? Number(offset + perPage) : filteredData.length} of {filteredData.length} entries</p>
